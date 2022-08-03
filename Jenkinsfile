@@ -20,23 +20,24 @@ pipeline {
       }
     }
 
-    stage('Deploy') {
+    stage('Push to Hub') {
       steps {
         bat 'docker build -t pixels-eureka-server .'
-        bat 'docker tag pixels-eureka-server abhi2104/pixels-eureka-server'
-        bat 'docker push abhi2104/pixels-eureka-server'
+        bat 'docker tag pixels-eureka-server abhi2104/pixels-eureka-server:latest'
+        bat 'docker push abhi2104/pixels-eureka-server:latest'
       }
     }
-
-    stage('') {
+    
+    stage('Deploy') {
       agent {
         node {
           label 'jenkinsagent'
         }
 
       }
+      options { skipDefaultCheckout() }
       steps {
-        sh 'docker pull abhi2104/pixels-eureka-server'
+        sh 'docker pull abhi2104/pixels-eureka-server:latest'
       }
     }
 
